@@ -1,0 +1,160 @@
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: May 31, 2020 at 10:21 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.6
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `fos_admissiondb_2020`
+--
+CREATE DATABASE IF NOT EXISTS `fos_admissiondb_2020` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `fos_admissiondb_2020`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applicant_eduinfo`
+--
+
+CREATE TABLE `applicant_eduinfo` (
+  `EduInfo_Id` bigint(20) NOT NULL,
+  `Applicant_FormNo` varchar(40) NOT NULL,
+  `NameOfExamBoard` varchar(300) NOT NULL,
+  `ExamSeatNo` varchar(100) DEFAULT NULL,
+  `YearofPassing` year(4) NOT NULL,
+  `NumberofAttempts` smallint(6) NOT NULL,
+  `LocationofSchool` varchar(400) NOT NULL COMMENT 'Location of School / In case of open schooling name of Exam Centre from where 12th std or equivalent  is passed',
+  `Country` varchar(200) NOT NULL,
+  `State_UT` varchar(200) NOT NULL,
+  `District` varchar(200) NOT NULL,
+  `MarksScored_SSC` int(11) NOT NULL,
+  `OutOfMarks_SSC` int(11) NOT NULL,
+  `HSCGroup` tinyint(4) NOT NULL COMMENT '1-PCM,2-PCB,3-PCMB',
+  `GroupBased_TheoryMarksScore` int(11) NOT NULL,
+  `GroupOutOfMarks_TheoryTotal` int(11) NOT NULL,
+  `GroupBased_PracticalMarksScore` int(11) NOT NULL,
+  `OutOfMarks_PracticalTotal` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applicant_info`
+--
+
+CREATE TABLE `applicant_info` (
+  `Applicant_FormNo` varchar(40) NOT NULL,
+  `PRN` int(11) DEFAULT NULL,
+  `FirstName` varchar(100) NOT NULL,
+  `LastName` varchar(100) DEFAULT NULL,
+  `MiddleName` varchar(100) DEFAULT NULL,
+  `Gender` char(1) NOT NULL,
+  `NamePerQualifyingExam` varchar(300) NOT NULL,
+  `MobileNo` int(11) NOT NULL,
+  `EmailID` varchar(300) NOT NULL,
+  `DoB` date NOT NULL,
+  `Nationality` varchar(30) NOT NULL,
+  `FatherName` varchar(300) NOT NULL,
+  `FatherMobileNo` int(11) NOT NULL,
+  `FatherEmailID` varchar(300) DEFAULT NULL,
+  `MotherName` varchar(300) NOT NULL,
+  `MotherMobileNo` int(11) DEFAULT NULL,
+  `MotherEmailID` varchar(300) DEFAULT NULL,
+  `ApplicantAadharNo` int(11) NOT NULL,
+  `PermanantAddress` varchar(500) NOT NULL,
+  `PresentAddress` varchar(500) NOT NULL,
+  `ReservationCategory` varchar(4) NOT NULL,
+  `SportsPerson` tinyint(1) NOT NULL,
+  `Gen_EWS` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applicant_specialcategoryinfo`
+--
+
+CREATE TABLE `applicant_specialcategoryinfo` (
+  `Applicant_SpecCategoryId` int(11) NOT NULL,
+  `Applicant_FormNo` varchar(40) NOT NULL,
+  `Phy_Handicapped` tinyint(1) NOT NULL,
+  `DefencePersonnel` tinyint(1) NOT NULL,
+  `KashmiriMigrant` tinyint(1) NOT NULL,
+  `Ward_MSUEmp` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applicant_sportsinfo`
+--
+
+CREATE TABLE `applicant_sportsinfo` (
+  `Applicant_SportsId` bigint(20) NOT NULL,
+  `Applicant_FormNo` varchar(40) NOT NULL,
+  `LevelofTournament` tinyint(4) NOT NULL COMMENT '1-District,2-State,3-National',
+  `Participated` tinyint(1) NOT NULL,
+  `Won` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `applicant_eduinfo`
+--
+ALTER TABLE `applicant_eduinfo`
+  ADD PRIMARY KEY (`EduInfo_Id`),
+  ADD KEY `Applicant_FormNo` (`Applicant_FormNo`);
+
+--
+-- Indexes for table `applicant_info`
+--
+ALTER TABLE `applicant_info`
+  ADD PRIMARY KEY (`Applicant_FormNo`),
+  ADD UNIQUE KEY `PRN` (`PRN`);
+
+--
+-- Indexes for table `applicant_specialcategoryinfo`
+--
+ALTER TABLE `applicant_specialcategoryinfo`
+  ADD PRIMARY KEY (`Applicant_SpecCategoryId`),
+  ADD KEY `Applicant_FormNo` (`Applicant_FormNo`);
+
+--
+-- Indexes for table `applicant_sportsinfo`
+--
+ALTER TABLE `applicant_sportsinfo`
+  ADD PRIMARY KEY (`Applicant_SportsId`),
+  ADD KEY `Applicant_FormNo` (`Applicant_FormNo`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `applicant_eduinfo`
+--
+ALTER TABLE `applicant_eduinfo`
+  ADD CONSTRAINT `applicant_eduinfo_ibfk_1` FOREIGN KEY (`Applicant_FormNo`) REFERENCES `applicant_info` (`Applicant_FormNo`);
+
+--
+-- Constraints for table `applicant_specialcategoryinfo`
+--
+ALTER TABLE `applicant_specialcategoryinfo`
+  ADD CONSTRAINT `applicant_specialcategoryinfo_ibfk_1` FOREIGN KEY (`Applicant_FormNo`) REFERENCES `applicant_info` (`Applicant_FormNo`);
+
+--
+-- Constraints for table `applicant_sportsinfo`
+--
+ALTER TABLE `applicant_sportsinfo`
+  ADD CONSTRAINT `applicant_sportsinfo_ibfk_1` FOREIGN KEY (`Applicant_FormNo`) REFERENCES `applicant_info` (`Applicant_FormNo`);
+COMMIT;
